@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Viewing Mode</title>
+    <style>
+        /* Basic reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        /* Page title styling */
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 1.5em;
+        }
+
+        /* Container for the options */
+        .option-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        /* Individual option styling */
+        .option {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .option:hover {
+            transform: scale(1.05);
+        }
+
+        /* Background images for options */
+        .freestyle {
+            background: url('path/to/freestyle-image.jpg') center/cover no-repeat;
+        }
+
+        .tour {
+            background: url('path/to/tour-image.jpg') center/cover no-repeat;
+        }
+
+        /* Text overlay */
+        .text-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1em;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .text-overlay h3 {
+            margin-bottom: 0.5em;
+            font-size: 1.5em;
+        }
+
+        .text-overlay p {
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h2>관람 방식을 선택해주세요</h2>
+
+    <div class="option-container">
+        <!-- Freestyle Option -->
+        <div class="option freestyle" onclick="goToPage('free.html')">
+            <div class="text-overlay">
+                <h3>자유형</h3>
+                <p>자유롭게 관람하며 설명을 듣고 싶은 작품만 해설을 듣고 질문을 해보세요.</p>
+            </div>
+        </div>
+
+        <!-- Tour Option -->
+        <div class="option tour" onclick="goToPage('tour.html')">
+            <div class="text-overlay">
+                <h3>투어형</h3>
+                <p>추천 코스를 따라 AI 도슨트의 설명을 듣고 질문을 해보세요. (1시간 30분 소요 예정)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToPage(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>
