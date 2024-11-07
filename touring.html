@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touring</title>
+    <style>
+        /* Basic reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .message-box {
+            background-color: #333;
+            padding: 1em;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 1em;
+            text-align: center;
+        }
+        .artwork {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .next-button {
+            background-color: #8B3E3E;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75em 0;
+            width: 100%;
+            max-width: 600px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+        .next-button:hover {
+            background-color: #A84D4D;
+        }
+        .instruction {
+            margin-top: 10px;
+            color: #aaa;
+            font-size: 0.9em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="message-box" id="description">Loading description...</div>
+    <div class="artwork">
+        <img id="artworkImage" src="https://via.placeholder.com/600x400?text=Artwork+Image" alt="Artwork">
+    </div>
+    <button class="next-button" onclick="goToNextArtwork()">다음 작품으로 넘어가기</button>
+
+    <script>
+        // Sample artwork data (should match the one in tourstart.html)
+        const artworks = [
+            { id: 1, title: "Mona Lisa", image: "https://cdn.pixabay.com/photo/2015/04/10/01/41/monalisa-71501_1280.jpg", description: "이 작품은 레오나르도 다 빈치의 걸작입니다." },
+            { id: 2, title: "The Birth of Venus", image: "https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg", description: "이 작품은 비너스의 탄생을 묘사한 것입니다." },
+            { id: 3, title: "Starry Night", image: "https://cdn.pixabay.com/photo/2015/12/01/19/48/starry-night-1076125_1280.jpg", description: "빈센트 반 고흐의 대표적인 작품 중 하나입니다." }
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentId = parseInt(urlParams.get('id')) || 0;
+
+        function loadArtwork() {
+            if (currentId < artworks.length) {
+                const artwork = artworks[currentId];
+                document.getElementById('description').textContent = artwork.description;
+                document.getElementById('artworkImage').src = artwork.image;
+            } else {
+                window.location.href = 'tourend.html';
+            }
+        }
+
+        function goToNextArtwork() {
+            currentId++;
+            if (currentId < artworks.length) {
+                window.location.href = `tourstart.html?id=${currentId}`;
+            } else {
+                window.location.href = 'tourend.html';
+            }
+        }
+
+        window.onload = loadArtwork;
+    </script>
+</body>
+</html>
