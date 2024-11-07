@@ -11,20 +11,16 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background-color: #1a1a1a;
             color: #fff;
             font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
             align-items: center;
             padding: 20px;
             min-height: 100vh;
         }
-
-        /* Message boxes styling */
         .message-box {
             background-color: #333;
             padding: 1em;
@@ -32,49 +28,30 @@
             width: 100%;
             max-width: 600px;
             margin-bottom: 1em;
+            text-align: center;
         }
-
-        .message-box p {
-            margin-bottom: 0.5em;
-            line-height: 1.5;
-        }
-
-        /* Image styling */
         .artwork {
             width: 100%;
             max-width: 600px;
-            margin: 20px 0;
             border-radius: 10px;
-            overflow: hidden;
+            margin: 20px 0;
         }
-
-        .artwork img {
-            width: 100%;
-            display: block;
-        }
-
-        /* Button styling */
         .next-button {
-            display: block;
-            width: 100%;
-            max-width: 600px;
-            background-color: #8B3E3E; /* Dark red color */
+            background-color: #8B3E3E;
             color: #fff;
             border: none;
             border-radius: 25px;
             padding: 0.75em 0;
+            width: 100%;
+            max-width: 600px;
             font-size: 1em;
-            text-align: center;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 20px;
+            text-align: center;
         }
-
         .next-button:hover {
-            background-color: #A84D4D; /* Slightly lighter red on hover */
+            background-color: #A84D4D;
         }
-
-        /* Instruction text */
         .instruction {
             margin-top: 10px;
             color: #aaa;
@@ -84,54 +61,38 @@
     </style>
 </head>
 <body>
-    <!-- Tour instructions -->
-    <div class="message-box">
-        <p id="instruction1">독바로 가서 방을 나가세요.</p>
-        <p id="instruction2">휴식 시간이 필요하신가요? Café Mollien에 가셔서 테라스에서 피라미드의 멋진 전망을 즐겨보세요.</p>
-        <p id="instruction3">넓은 계단을 내려가세요.</p>
-        <p id="instruction4">방 중앙에 있는 두 개의 큰 남성 조각상으로 올라가 보세요.</p>
-    </div>
-
-    <!-- Artwork image -->
+    <div class="message-box" id="instructions">Loading instructions...</div>
     <div class="artwork">
         <img id="artworkImage" src="https://via.placeholder.com/600x400?text=Artwork+Image" alt="Artwork">
     </div>
-
-    <!-- Instructions to proceed -->
     <div class="instruction">해당 작품을 찾으셨다면 아래 버튼을 눌러주세요.</div>
-
-    <!-- Navigation button -->
-    <button class="next-button" id="nextButton" onclick="nextArtwork()">"작품제목" 도착</button>
+    <button class="next-button" id="nextButton" onclick="goToTouring()">"작품제목" 도착</button>
 
     <script>
-        // Sample database data
+        // Sample artwork data
         const artworks = [
-            { id: 1, title: '모나리자', image: 'https://cdn.pixabay.com/photo/2015/04/10/01/41/monalisa-71501_1280.jpg' },
-            { id: 2, title: '비너스의 탄생', image: 'https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg' }
-            // Add more artworks as needed
+            { id: 1, title: "Mona Lisa", image: "https://cdn.pixabay.com/photo/2015/04/10/01/41/monalisa-71501_1280.jpg", instructions: "독바로 가서 방을 나가세요." },
+            { id: 2, title: "The Birth of Venus", image: "https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg", instructions: "넓은 계단을 내려가세요." },
+            { id: 3, title: "Starry Night", image: "https://cdn.pixabay.com/photo/2015/12/01/19/48/starry-night-1076125_1280.jpg", instructions: "방 중앙에 있는 두 개의 큰 남성 조각상으로 올라가 보세요." }
         ];
-
         let currentId = 0;
 
-        // Function to load artwork data
         function loadArtwork() {
             if (currentId < artworks.length) {
                 const artwork = artworks[currentId];
+                document.getElementById('instructions').textContent = artwork.instructions;
                 document.getElementById('artworkImage').src = artwork.image;
-                document.getElementById('nextButton').innerText = `"${artwork.title}" 도착`;
+                document.getElementById('nextButton').textContent = `"${artwork.title}" 도착`;
             } else {
-                // Redirect to the tourend.html page if the last artwork is reached
+                // Redirect to tourend.html if the last artwork is reached
                 window.location.href = 'tourend.html';
             }
         }
 
-        // Function to move to the next artwork
-        function nextArtwork() {
-            currentId++;
-            loadArtwork();
+        function goToTouring() {
+            window.location.href = `touring.html?id=${currentId}`;
         }
 
-        // Load the initial artwork when the page loads
         window.onload = loadArtwork;
     </script>
 </body>
