@@ -3,164 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Touring</title>
+    <title>Quantum Computing Info</title>
     <style>
-        /* Basic reset and styling */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
-            background-color: #1a1a1a;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .message-box {
-            background-color: #333;
-            padding: 1em;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 1em;
-            text-align: center;
-            font-size: 1.1em;
-        }
-        .artwork {
-            width: 100%;
-            max-width: 400px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .next-button {
-            background-color: #8B3E3E;
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            padding: 0.75em 0;
-            width: 100%;
-            max-width: 600px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .next-button:hover {
-            background-color: #A84D4D;
-        }
-        .question-section {
-            width: 100%;
-            max-width: 600px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .question-input {
-            flex-grow: 1;
-            padding: 0.75em;
-            border-radius: 20px;
-            border: none;
-            font-size: 1em;
-        }
-        .mic-button, .send-button {
-            background-color: #555;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
+            align-items: center;
+            height: 100vh;
+            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
         }
-        .response-box {
-            background-color: #444;
-            padding: 1em;
-            border-radius: 10px;
+        .container {
+            max-width: 400px;
+            text-align: center;
+            background-color: #333;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .image-container img {
             width: 100%;
-            max-width: 600px;
+            border-radius: 10px;
+        }
+        .content {
             margin-top: 20px;
-            font-size: 1em;
+            text-align: left;
+        }
+        .content h3 {
+            font-weight: normal;
+        }
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #c9302c;
         }
     </style>
 </head>
 <body>
-    <div class="artwork">
-        <img id="artworkImage" src="https://via.placeholder.com/400x600?text=Artwork+Image" alt="Artwork">
+
+<div class="container">
+    <div class="image-container">
+        <img src="mona_lisa.jpg" alt="Mona Lisa">
     </div>
-    <div class="message-box" id="description">Loading description...</div>
-
-    <!-- Question and Answer Interaction -->
-    <div class="question-section">
-        <input type="text" class="question-input" id="questionInput" placeholder="Ask a question...">
-        <button class="mic-button" onclick="simulateVoiceInput()">🎤</button>
-        <button class="send-button" onclick="sendQuestion()">➔</button>
+    <div class="content">
+        <h3>AI도슨트</h3>
+        <p>Quantum computing is a type of computing where information is processed using quantum-mechanical phenomena, such as superposition and entanglement. In traditional computing, information is processed using bits, which can have a value of either 0 or 1. In quantum computing, information is processed using quantum bits, or qubits, which can exist in multiple states simultaneously.</p>
     </div>
-    <div class="response-box" id="responseBox" style="display: none;"></div>
+    <div class="button-container">
+        <button class="button" onclick="navigateToTour()">다음 작품으로 넘어가기</button>
+    </div>
+</div>
 
-    <!-- Next Artwork Button -->
-    <button class="next-button" onclick="goToNextArtwork()">다음 작품으로 넘어가기</button>
+<script>
+    function navigateToTour() {
+        window.location.href = 'tourstart.html';
+    }
+</script>
 
-    <script>
-        // Sample artwork data (same as in tourstart.html)
-        const artworks = [
-            { id: 1, title: "Mona Lisa", image: "https://cdn.pixabay.com/photo/2015/04/10/01/41/monalisa-71501_1280.jpg", description: "이 작품은 레오나르도 다 빈치의 걸작입니다." },
-            { id: 2, title: "The Birth of Venus", image: "https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg", description: "이 작품은 비너스의 탄생을 묘사한 것입니다." },
-            { id: 3, title: "Starry Night", image: "https://cdn.pixabay.com/photo/2015/12/01/19/48/starry-night-1076125_1280.jpg", description: "빈센트 반 고흐의 대표적인 작품 중 하나입니다." }
-        ];
-
-        const urlParams = new URLSearchParams(window.location.search);
-        let currentId = parseInt(urlParams.get('id')) || 0;
-
-        // Function to load the artwork based on the current ID
-        function loadArtwork() {
-            if (currentId < artworks.length) {
-                const artwork = artworks[currentId];
-                document.getElementById('artworkImage').src = artwork.image;
-                document.getElementById('description').textContent = artwork.description;
-            } else {
-                window.location.href = 'tourend.html';
-            }
-        }
-
-        // Function to simulate voice input for question
-        function simulateVoiceInput() {
-            document.getElementById('questionInput').value = "What is the significance of this artwork?";
-            sendQuestion();
-        }
-
-        // Function to handle question submission
-        function sendQuestion() {
-            const question = document.getElementById('questionInput').value;
-            if (question) {
-                // Display a simulated response
-                const responseBox = document.getElementById('responseBox');
-                responseBox.style.display = "block";
-                responseBox.textContent = `AI도슨트: The significance of this artwork is that it represents ${question.toLowerCase()}.`;
-                document.getElementById('questionInput').value = ""; // Clear input after submission
-            }
-        }
-
-        // Function to go to the next artwork (returns to tourstart.html)
-        function goToNextArtwork() {
-            currentId++;
-            if (currentId < artworks.length) {
-                window.location.href = `tourstart.html?id=${currentId}`;
-            } else {
-                window.location.href = 'tourend.html';
-            }
-        }
-
-        // Load the initial artwork when the page loads
-        window.onload = loadArtwork;
-    </script>
 </body>
 </html>
