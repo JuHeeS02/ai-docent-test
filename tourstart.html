@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tour Start</title>
     <style>
-        /* Basic reset and styling */
+        /* 기본 스타일 및 리셋 */
         * {
             margin: 0;
             padding: 0;
@@ -18,33 +18,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             min-height: 100vh;
         }
         .message-box {
             background-color: #333;
-            padding: 1em;
-            border-radius: 10px;
+            padding: 0.8em;
+            border-radius: 8px;
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             margin-bottom: 1em;
             text-align: center;
         }
         .artwork {
             width: 100%;
-            max-width: 600px;
-            border-radius: 10px;
-            margin: 20px 0;
+            max-width: 300px; /* 모바일에서 이미지 크기 줄임 */
+            border-radius: 8px;
+            margin: 15px 0;
         }
         .next-button {
             background-color: #8B3E3E;
             color: #fff;
             border: none;
-            border-radius: 25px;
-            padding: 0.75em 0;
+            border-radius: 20px;
+            padding: 0.6em 0;
             width: 100%;
-            max-width: 600px;
-            font-size: 1em;
+            max-width: 500px;
+            font-size: 0.9em; /* 모바일에 맞게 글씨 크기 조정 */
             cursor: pointer;
             transition: background-color 0.3s;
             text-align: center;
@@ -52,39 +52,99 @@
         .next-button:hover {
             background-color: #A84D4D;
         }
-        .instruction {
-            margin-top: 10px;
+        .instructions-list {
+            background-color: #333;
+            padding: 0.8em;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9em; /* 글씨 크기 줄임 */
+        }
+        .instruction-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             color: #aaa;
-            font-size: 0.9em;
+        }
+        .instruction-icon {
+            font-size: 1em; /* 아이콘 크기 줄임 */
+        }
+        .instruction {
+            margin-top: 8px;
+            color: #aaa;
+            font-size: 0.8em; /* 안내 텍스트 글씨 크기 줄임 */
             text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="message-box" id="instructions">Loading instructions...</div>
+    <div class="instructions-list" id="instructions">
+        <!-- Instructions will be dynamically inserted here -->
+    </div>
     <div class="artwork">
-        <img id="artworkImage" src="https://via.placeholder.com/600x400?text=Artwork+Image" alt="Artwork">
+        <img id="artworkImage" src="https://via.placeholder.com/300x200?text=Artwork+Image" alt="Artwork">
     </div>
     <div class="instruction">해당 작품을 찾으셨다면 아래 버튼을 눌러주세요.</div>
     <button class="next-button" id="nextButton" onclick="goToTouring()">"작품제목" 도착</button>
 
     <script>
-        // Sample artwork data
+        // 작품 데이터 배열
         const artworks = [
-            { id: 1, title: "Mona Lisa", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdrKqwzNETt2r1JHU7vTFNHDTzuuLPNJoxgg&s", instructions: "설리 윙으로 들어가세요.\n 티켓 검사를 마친 후 직진하세요. \n Pavillon de l'Horloge 입구에 도착하면 오른쪽 계단을 타고 1층으로 올라가세요.\n 계단 꼭대기에 도착하면 오른쪽에 있는 이중 나무 문을 통과하세요.\n 당신은 Salle des Cariatides에 있습니다. \n뒤를 돌아보면 문 위에 있는 음악가들의 갤러리가 보입니다." },
-            { id: 2, title: "The Birth of Venus", image: "https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg", instructions: "넓은 계단을 내려가세요." },
-            { id: 3, title: "Starry Night", image: "https://cdn.pixabay.com/photo/2015/12/01/19/48/starry-night-1076125_1280.jpg", instructions: "방 중앙에 있는 두 개의 큰 남성 조각상으로 올라가 보세요." }
+            { 
+                id: 1, 
+                title: "Mona Lisa", 
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdrKqwzNETt2r1JHU7vTFNHDTzuuLPNJoxgg&s", 
+                instructions: "설리 윙으로 들어가세요.\n티켓 검사를 마친 후 직진하세요.\nPavillon de l'Horloge 입구에 도착하면 오른쪽 계단을 타고 1층으로 올라가세요.\n계단 꼭대기에 도착하면 오른쪽에 있는 이중 나무 문을 통과하세요.\n당신은 Salle des Cariatides에 있습니다. 뒤를 돌아보면 문 위에 있는 음악가들의 갤러리가 보입니다."
+            },
+            { 
+                id: 2, 
+                title: "The Birth of Venus", 
+                image: "https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg", 
+                instructions: "넓은 계단을 내려가세요."
+            },
+            { 
+                id: 3, 
+                title: "Starry Night", 
+                image: "https://cdn.pixabay.com/photo/2015/12/01/19/48/starry-night-1076125_1280.jpg", 
+                instructions: "방 중앙에 있는 두 개의 큰 남성 조각상으로 올라가 보세요."
+            }
         ];
         let currentId = 0;
 
         function loadArtwork() {
             if (currentId < artworks.length) {
                 const artwork = artworks[currentId];
-                document.getElementById('instructions').textContent = artwork.instructions;
                 document.getElementById('artworkImage').src = artwork.image;
                 document.getElementById('nextButton').textContent = `"${artwork.title}" 도착`;
+                
+                // 안내 텍스트를 아이콘과 함께 리스트 형태로 구성
+                const instructionsDiv = document.getElementById('instructions');
+                instructionsDiv.innerHTML = ''; // 기존 내용 초기화
+                
+                const instructionsArray = artwork.instructions.split("\n");
+                const icons = ["📍", "⬆️", "🏛️", "🚪", "📍"]; // 각 지시사항에 맞는 아이콘 배열
+                
+                instructionsArray.forEach((instruction, index) => {
+                    const instructionItem = document.createElement('div');
+                    instructionItem.classList.add('instruction-item');
+                    
+                    const iconSpan = document.createElement('span');
+                    iconSpan.classList.add('instruction-icon');
+                    iconSpan.textContent = icons[index] || "➡️"; // 아이콘이 부족하면 기본 화살표 사용
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = instruction.trim();
+                    
+                    instructionItem.appendChild(iconSpan);
+                    instructionItem.appendChild(textSpan);
+                    instructionsDiv.appendChild(instructionItem);
+                });
             } else {
-                // Redirect to tourend.html if the last artwork is reached
+                // 마지막 작품 이후 투어 종료 페이지로 이동
                 window.location.href = 'tourend.html';
             }
         }
