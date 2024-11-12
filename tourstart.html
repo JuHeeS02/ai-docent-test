@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tour Start</title>
     <style>
-        /* Basic reset and styling */
+        /* 기본 스타일 및 리셋 */
         * {
             margin: 0;
             padding: 0;
@@ -21,14 +21,26 @@
             padding: 20px;
             min-height: 100vh;
         }
-        .message-box {
+        .instructions-list {
             background-color: #333;
             padding: 1em;
             border-radius: 10px;
             width: 100%;
             max-width: 600px;
             margin-bottom: 1em;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .instruction-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        .instruction-icon {
+            font-size: 1.2em;
         }
         .artwork {
             width: 100%;
@@ -52,34 +64,22 @@
         .next-button:hover {
             background-color: #A84D4D;
         }
-        .instructions-list {
-            background-color: #333;
-            padding: 1em;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 600px;
+        .instruction {
             margin-top: 10px;
-        }
-        .instruction-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9em;
             color: #aaa;
-            margin-bottom: 10px;
-        }
-        .instruction-icon {
-            font-size: 1.2em;
+            font-size: 0.9em;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="artwork">
-        <img id="artworkImage" src="https://via.placeholder.com/600x400?text=Artwork+Image" alt="Artwork" class="artwork">
-    </div>
     <div class="instructions-list" id="instructionsList">
         <!-- Instructions will be dynamically inserted here -->
     </div>
+    <div class="artwork">
+        <img id="artworkImage" src="https://via.placeholder.com/600x400?text=Artwork+Image" alt="Artwork" class="artwork">
+    </div>
+    <div class="instruction">해당 작품을 찾으셨다면 아래 버튼을 눌러주세요.</div>
     <button class="next-button" id="nextButton" onclick="goToTouring()">"작품제목" 도착</button>
 
     <script>
@@ -90,27 +90,11 @@
                 title: "Mona Lisa", 
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdrKqwzNETt2r1JHU7vTFNHDTzuuLPNJoxgg&s", 
                 instructions: [
-                    { icon: "⬆️", text: "설리 윙으로 들어가세요." },
+                    { icon: "📍", text: "설리 윙으로 들어가세요." },
                     { icon: "⬆️", text: "티켓 검사를 마친 후 직진하세요." },
                     { icon: "🏛️", text: "Pavillon de l'Horloge 입구에 도착하면 오른쪽 계단을 타고 1층으로 올라가세요." },
                     { icon: "🚪", text: "계단 꼭대기에 도착하면 오른쪽에 있는 이중 나무 문을 통과하세요." },
                     { icon: "📍", text: "당신은 Salle des Cariatides에 있습니다. 뒤를 돌아보면 문 위에 있는 음악가들의 갤러리가 보입니다." }
-                ]
-            },
-            { 
-                id: 2, 
-                title: "The Birth of Venus", 
-                image: "https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg", 
-                instructions: [
-                    { icon: "⬇️", text: "넓은 계단을 내려가세요." }
-                ]
-            },
-            { 
-                id: 3, 
-                title: "Starry Night", 
-                image: "https://cdn.pixabay.com/photo/2015/12/01/19/48/starry-night-1076125_1280.jpg", 
-                instructions: [
-                    { icon: "🗿", text: "방 중앙에 있는 두 개의 큰 남성 조각상으로 올라가 보세요." }
                 ]
             }
         ];
