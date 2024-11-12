@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tour Start</title>
     <style>
-        /* 기본 스타일 및 리셋 */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +31,7 @@
         }
         .artwork {
             width: 100%;
-            max-width: 300px; /* 모바일에서 이미지 크기 줄임 */
+            max-width: 300px; 
             border-radius: 8px;
             margin: 15px 0;
         }
@@ -44,7 +43,7 @@
             padding: 0.6em 0;
             width: 100%;
             max-width: 500px;
-            font-size: 0.9em; /* 모바일에 맞게 글씨 크기 조정 */
+            font-size: 0.9em; 
             cursor: pointer;
             transition: background-color 0.3s;
             text-align: center;
@@ -62,7 +61,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            font-size: 0.9em; /* 글씨 크기 줄임 */
+            font-size: 0.9em; 
         }
         .instruction-item {
             display: flex;
@@ -71,12 +70,12 @@
             color: #aaa;
         }
         .instruction-icon {
-            font-size: 1em; /* 아이콘 크기 줄임 */
+            font-size: 1em;
         }
         .instruction {
             margin-top: 8px;
             color: #aaa;
-            font-size: 0.8em; /* 안내 텍스트 글씨 크기 줄임 */
+            font-size: 0.8em; 
             text-align: center;
         }
     </style>
@@ -121,28 +120,17 @@
                 document.getElementById('artworkImage').src = artwork.image;
                 document.getElementById('nextButton').textContent = `"${artwork.title}" 도착`;
                 
-                // 안내 텍스트를 아이콘과 함께 리스트 형태로 구성
                 const instructionsDiv = document.getElementById('instructions');
-                instructionsDiv.innerHTML = ''; // 기존 내용 초기화
-                
+        
                 const instructionsArray = artwork.instructions.split("\n");
-                const icons = ["📍", "⬆️", "🏛️", "🚪", "📍"]; // 각 지시사항에 맞는 아이콘 배열
+                const icons = ["📍", "⬆️", "🏛️", "🚪", "📍"]; 
                 
-                instructionsArray.forEach((instruction, index) => {
-                    const instructionItem = document.createElement('div');
-                    instructionItem.classList.add('instruction-item');
-                    
-                    const iconSpan = document.createElement('span');
-                    iconSpan.classList.add('instruction-icon');
-                    iconSpan.textContent = icons[index] || "➡️"; // 아이콘이 부족하면 기본 화살표 사용
-                    
-                    const textSpan = document.createElement('span');
-                    textSpan.textContent = instruction.trim();
-                    
-                    instructionItem.appendChild(iconSpan);
-                    instructionItem.appendChild(textSpan);
-                    instructionsDiv.appendChild(instructionItem);
-                });
+                instructionsDiv.innerHTML = instructionsArray.map((instruction, index) => `
+                    <div class="instruction-item">
+                        <span class="instruction-icon">${icons[index] || "➡️"}</span>
+                        <span>${instruction.trim()}</span>
+                    </div>
+                `).join('');
             } else {
                 // 마지막 작품 이후 투어 종료 페이지로 이동
                 window.location.href = 'tourend.html';
