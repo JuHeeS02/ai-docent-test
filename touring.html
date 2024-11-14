@@ -1,10 +1,12 @@
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Touring</title>
     <style>
+        /* Basic reset and styling */
         * {
             margin: 0;
             padding: 0;
@@ -61,52 +63,95 @@
         .next-button:hover {
             background-color: #A84D4D;
         }
+        .question-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .question-input {
+            flex-grow: 1;
+            padding: 0.5em;
+            border-radius: 20px;
+            border: none;
+            font-size: 1em;
+            color: #000;
+        }
+        .icon-button {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="content">
-        <img id="artworkImage" src="https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img2-2.png?raw=true" alt="Artwork" class="artwork">
+        <img id="artworkImage" src="https://via.placeholder.com/400x600?text=Artwork+Image" alt="Artwork" class="artwork">
         
         <div class="response-container">
             <div class="ai-response" id="description">
-                앙리 2세 치세에 루브르 박물관은 중세 요새에서 르네상스 궁전으로의 전환을 완료했습니다. Salle des Cariatides는 원래 건축가 Pierre Lescot가 고전적인 스타일로 디자인한 화려한 무도장이었습니다. 여기에는 음악가 갤러리가 있으며, 로마에서 영감을 받은 4개의 '카리아티드'가 있습니다. 기둥 역할을 하는 이 조각된 여성상은 건축가가 앙리 2세를 로마 황제 아우구스투스의 지위로 격상시키는 방식이었습니다!
+                Loading description...
             </div>
+        </div>
+
+        <div class="question-section">
+            <input type="text" class="question-input" id="questionInput" placeholder="Ask a question...">
+            <button class="icon-button" onclick="simulateVoiceInput()">🎤</button>
+            <button class="icon-button" onclick="sendQuestion()">➔</button>
         </div>
 
         <button class="next-button" onclick="goToNextArtwork()">다음 작품으로 넘어가기</button>
     </div>
 
     <script>
-        // 두 개의 설명과 이미지 데이터를 정의
-        const artworkData = [
-            {
-                image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img2.png?raw=true",
-                description: "앙리 2세 치세에 루브르 박물관은 중세 요새에서 르네상스 궁전으로의 전환을 완료했습니다. Salle des Cariatides는 원래 건축가 Pierre Lescot가 고전적인 스타일로 디자인한 화려한 무도장이었습니다. 여기에는 음악가 갤러리가 있으며, 로마에서 영감을 받은 4개의 '카리아티드'가 있습니다. 기둥 역할을 하는 이 조각된 여성상은 건축가가 앙리 2세를 로마 황제 아우구스투스의 지위로 격상시키는 방식이었습니다!"
-            },
-            {
-                image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img2-2.png?raw=true",
-                description: "이 방의 용도는 1692년에 프랑스 왕족이 르네상스 시대에 수집하기 시작한 고전 조각품을 전시하는 데 사용되면서 바뀌었습니다. 왕실 컬렉션에 들어간 최초의 걸작 중 하나인 다이애나 더 헌트리스(Diana the Huntress )에 나폴레옹 1세가 구입한 잠자는 헤르마프로디토스(Sleeping Hermaphroditos ) 가 1807년에 추가되었습니다. 이 매혹적인 인물의 본질을 이해하려면 모든 면에서 보아야 합니다."
-            }
+        // Sample artwork data
+        const artworks = [
+            { id: 1, title: "Mona Lisa", image: "https://cdn.pixabay.com/photo/2015/04/10/01/41/monalisa-71501_1280.jpg", description: "Quantum computing is a type of computing where information is processed using quantum-mechanical phenomena, such as superposition and entanglement." },
+            { id: 2, title: "The Birth of Venus", image: "https://cdn.pixabay.com/photo/2016/09/11/18/04/venus-1664199_1280.jpg", description: "The Birth of Venus is a masterpiece by Botticelli, illustrating the Roman goddess Venus emerging from the sea." },
+            { id: 3, title: "Starry Night", image: "https://cdn.pixabay.com/photo/2015/12/01/19/48/starry-night-1076125_1280.jpg", description: "Starry Night is a famous painting by Van Gogh, depicting a swirling night sky over a quiet town." }
         ];
 
-        let currentIndex = 0;
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentId = parseInt(urlParams.get('id')) || 0;
 
         function loadArtwork() {
-            const artwork = artworkData[currentIndex];
-            document.getElementById('artworkImage').src = artwork.image;
-            document.getElementById('description').textContent = artwork.description;
+            if (currentId < artworks.length) {
+                const artwork = artworks[currentId];
+                document.getElementById('artworkImage').src = artwork.image;
+                document.getElementById('description').textContent = artwork.description;
+            } else {
+                window.location.href = 'tourend.html';
+            }
+        }
 
-            // 5초 후 다음 설명으로 자동 전환
-            if (currentIndex < artworkData.length - 1) {
-                setTimeout(() => {
-                    currentIndex++;
-                    loadArtwork();
-                }, 5000); // 5초 후에 전환
+        function simulateVoiceInput() {
+            document.getElementById('questionInput').value = "What is the significance of this artwork?";
+            sendQuestion();
+        }
+
+        function sendQuestion() {
+            const question = document.getElementById('questionInput').value;
+            if (question) {
+                const responseBox = document.getElementById('description');
+                responseBox.textContent = `AI도슨트: This artwork's significance is that it symbolizes ${question.toLowerCase()}.`;
+                document.getElementById('questionInput').value = ""; // Clear input
             }
         }
 
         function goToNextArtwork() {
-            window.location.href = 'tourend.html';
+            currentId++;
+            if (currentId < artworks.length) {
+                window.location.href = `tourstart.html?id=${currentId}`;
+            } else {
+                window.location.href = 'tourend.html';
+            }
         }
 
         window.onload = loadArtwork;
