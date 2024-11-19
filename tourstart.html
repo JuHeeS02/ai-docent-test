@@ -161,8 +161,8 @@
         let currentId = 0;
 
         function loadArtwork() {
-            if (currentId < artworks.length) {
-                const artwork = artworks[currentId];
+            if (currentId <= artworks.length) {
+                const artwork = artworks[currentId-1];
                 document.getElementById('artworkImage').src = artwork.image;
                 document.getElementById('nextButton').textContent = `"${artwork.title}" 도착`;
                 
