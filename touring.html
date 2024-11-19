@@ -172,7 +172,7 @@
 
         function goToNextArtwork() {
             currentId++;
-            if (currentId < artworks.length) {
+            if (currentId <= artworks.length) {
                 window.location.href = `tourstart.html?id=${currentId}`;
             } else {
                 window.location.href = 'tourend.html';
