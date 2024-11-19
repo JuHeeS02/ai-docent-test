@@ -144,11 +144,11 @@
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
-        let currentId = parseInt(urlParams.get('id')) || 0;
+        let currentId = parseInt(urlParams.get('id')) || 1;
 
         function loadArtwork() {
-            if (currentId < artworks.length) {
-                const artwork = artworks[currentId];
+            if (currentId <= artworks.length) {
+                const artwork = artworks[currentId -1];
                 document.getElementById('artworkImage').src = artwork.image;
                 document.getElementById('description').textContent = artwork.description;
             } else {
