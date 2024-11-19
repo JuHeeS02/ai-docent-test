@@ -146,6 +146,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         let currentId = parseInt(urlParams.get('id')) || 1;
 
+        if (currentId < 1) {
+        currentId = 1; // id가 0이거나 음수인 경우 1로 설정
+    }
+
         function loadArtwork() {
             if (currentId <= artworks.length) {
                 const artwork = artworks[currentId -1];
