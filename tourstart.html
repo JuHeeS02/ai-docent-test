@@ -158,7 +158,12 @@
                 instructions: "밖으로 나갈 길을 찾으려면 피라미드 맞은편의 방으로 가세요. \n왼쪽의 나선형 계단을 내려가세요. \n오른쪽 계단을 내려가서 피라미드까지 직진하세요."
             }
         ];
-        let currentId = 0;
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentId = parseInt(urlParams.get('id')) || 1;
+
+        if (currentId < 1) {
+            currentId = 1; // id가 0이거나 음수인 경우 1로 설정
+        }
 
         function loadArtwork() {
             if (currentId <= artworks.length) {
