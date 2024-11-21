@@ -115,7 +115,7 @@
             { id: 1, 
             title: "Psyche Revived by Cupid’s Kiss / Antonio Canova",  
             image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img11.png?raw=true", 
-            description: "미켈란젤로 갤러리에 들어가면 다른 이탈리아 조각가의 작품이 가장 먼저 눈에 들어올 것입니다... 큐피드는 거부하기 어려울 수 있습니다! 안토니오 카노바는 신화적 에피소드를 섬세한 대리석으로 묘사하는 데 특화되어 있었습니다. 그가 19세기 후반의 낭만주의 시인들에게 왜 그렇게 존경을 받았는지 쉽게 알 수 있습니다! 그는 돌에 감정을 포착하는 데 성공했습니다. 큐피드의 키스로 부활한 프시케는 즉시 사랑의 느낌을 전달합니다. 카노바는 고전적인 모델을 그대로 따라하는 것이 아니라 조각품 구성에 거의 안무적인 접근 방식을 취하여 여신이 깨어나는 강렬한 순간을 선택했습니다. 우리를 감동시키는 힘을 전혀 잃지 않은 걸작에 포착된 순간입니다." 
+            description: "미켈란젤로 갤러리에 들어가면 다른 이탈리아 조각가의 작품이 가장 먼저 눈에 들어올 것입니다...<br>큐피드는 거부하기 어려울 수 있습니다! 안토니오 카노바는 신화적 에피소드를 섬세한 대리석으로 묘사하는 데 특화되어 있었습니다.<br>그가 19세기 후반의 낭만주의 시인들에게 왜 그렇게 존경을 받았는지 쉽게 알 수 있습니다! 그는 돌에 감정을 포착하는 데 성공했습니다.<br>큐피드의 키스로 부활한 프시케는 즉시 사랑의 느낌을 전달합니다.<br>카노바는 고전적인 모델을 그대로 따라하는 것이 아니라 조각품 구성에 거의 안무적인 접근 방식을 취하여 여신이 깨어나는 강렬한 순간을 선택했습니다.<br>우리를 감동시키는 힘을 전혀 잃지 않은 걸작에 포착된 순간입니다." 
             }
         ];
 
@@ -123,7 +123,7 @@
             const artwork = artworks[0]; // artworks 배열의 첫 번째 작품 데이터 사용
             document.getElementById('artworkImage').src = artwork.image;
             document.getElementById('artworkImage').alt = artwork.title; // 이미지 설명 추가
-            document.getElementById('description').textContent = artwork.description;
+            document.getElementById('description').innerHTML = artwork.description; // innerHTML 사용으로 HTML 태그 적용
         }
 
         async function sendQuestion() {
@@ -154,7 +154,7 @@
 
                 const data = await response.json();
                 const answer = data.choices[0].text.trim();
-                document.getElementById('description').textContent = `AI 응답: ${answer}`;
+                document.getElementById('description').innerHTML += `<br><br>AI 응답: ${answer}`; // 응답을 기존 설명에 추가
             } catch (error) {
                 console.error('Error:', error);
                 alert("응답을 가져오는 중 문제가 발생했습니다.");
