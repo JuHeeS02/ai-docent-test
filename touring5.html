@@ -113,9 +113,9 @@
         // Sample artwork data
         const artworks = [
             { id: 1, 
-            title: "The Salon Carré",  
-            image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img6-2.png?raw=true", 
-            description: "18세기에 'Salon Carré'(Square Room)는 왕립 회화 및 조각 아카데미 회원들의 작품을 전시하는 공간으로 사용되었습니다.<br>이 연례 전시, 즉 '살롱'은 오늘날 현대 미술 전시회의 선구자로 여겨지며, 당시 대중들 사이에서 큰 인기를 끌었습니다.<br>살롱의 역할과 중요성, 그리고 영향력은 약 1세기 동안 변화를 겪었지만, 본질적으로는 살아 있는 예술가들이 자신의 작품을 선보이고, 일반 대중이 현대 미술을 감상하며, 미술 비평이 시작되는 중요한 장소였습니다.<br>살롱은 예술가들의 명성을 만들거나 무너뜨리는 곳이었으며, 비평가들은 이곳에서 작품을 비교하고 대조하며 미술에 대한 논의를 활발히 이어갔습니다."
+              title: "The Salon Carré",  
+              image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img6-2.png?raw=true", 
+              description: "18세기에 'Salon Carré'(Square Room)는 왕립 회화 및 조각 아카데미 회원들의 작품을 전시하는 공간으로 사용되었습니다.<br>이 연례 전시, 즉 '살롱'은 오늘날 현대 미술 전시회의 선구자로 여겨지며, 당시 대중들 사이에서 큰 인기를 끌었습니다.<br>살롱의 역할과 중요성, 그리고 영향력은 약 1세기 동안 변화를 겪었지만, 본질적으로는 살아 있는 예술가들이 자신의 작품을 선보이고, 일반 대중이 현대 미술을 감상하며, 미술 비평이 시작되는 중요한 장소였습니다.<br>살롱은 예술가들의 명성을 만들거나 무너뜨리는 곳이었으며, 비평가들은 이곳에서 작품을 비교하고 대조하며 미술에 대한 논의를 활발히 이어갔습니다."
             }
         ];
 
@@ -123,7 +123,7 @@
             const artwork = artworks[0]; // artworks 배열의 첫 번째 작품 데이터 사용
             document.getElementById('artworkImage').src = artwork.image;
             document.getElementById('artworkImage').alt = artwork.title; // 이미지 설명 추가
-            document.getElementById('description').textContent = artwork.description;
+            document.getElementById('description').innerHTML = artwork.description; // innerHTML 사용으로 HTML 태그 적용
         }
 
         async function sendQuestion() {
@@ -154,7 +154,7 @@
 
                 const data = await response.json();
                 const answer = data.choices[0].text.trim();
-                document.getElementById('description').textContent = `AI 응답: ${answer}`;
+                document.getElementById('description').innerHTML += `<br><br>AI 응답: ${answer}`; // 응답을 기존 설명에 추가
             } catch (error) {
                 console.error('Error:', error);
                 alert("응답을 가져오는 중 문제가 발생했습니다.");
