@@ -90,21 +90,44 @@
                 instructions: "설리 윙으로 들어가세요.\n티켓 검사를 마친 후 직진하세요.\nPavillon de l'Horloge 입구에 도착하면 오른쪽 계단을 타고 1층으로   올라가세요.\n계단 꼭대기에 도착하면 오른쪽에 있는 이중 나무 문을 통과하세요.\n당신은 Salle des Cariatides에 있습니다. 뒤를 돌아보면 문 위에 있는 음악가들의 갤러리가 보입니다."
             }
         ];
-        function loadArtwork() {
-            document.getElementById('artworkImage').src = artwork.image;
-            document.getElementById('nextButton').textContent = `"${artwork.title}" 도착`;
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentId = parseInt(urlParams.get('id')) || 1;
 
-            const instructionsDiv = document.getElementById('instructions');
-            const instructionsArray = artwork.instructions.split("\n");
-
-            instructionsDiv.innerHTML = instructionsArray.map((instruction) => `
-                <div class="instruction-item">
-                    <span>${instruction.trim()}</span>
-                </div>
-            `).join('');
+        if (isNaN(currentId) || currentId < 1 || currentId > artworks.length) {
+            currentId = 1;
         }
-           function goToTouring() {
-            window.location.href = 'touring.html';
+
+        function loadArtwork() {
+            if (currentId <= artworks.length) {
+                const artwork = artworks[currentId-1];
+                document.getElementById('artworkImage').src = artwork.image;
+                document.getElementById('nextButton').textContent = `"${artwork.title}" 도착`;
+                
+                const instructionsDiv = document.getElementById('instructions');
+        
+                const instructionsArray = artwork.instructions.split("\n");
+                const icons = [
+                    "https://raw.githubusercontent.com/JuHeeS02/ai-docent-test/6fe18ad0c1f66ac4b7727da91ee26ab6d995c835/dataimg/assistant_navigation_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg", // 첫 번째 아이콘 링크
+                    "https://raw.githubusercontent.com/JuHeeS02/ai-docent-test/6fe18ad0c1f66ac4b7727da91ee26ab6d995c835/dataimg/north_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg", // 두 번째 아이콘 링크
+                    "https://raw.githubusercontent.com/JuHeeS02/ai-docent-test/6fe18ad0c1f66ac4b7727da91ee26ab6d995c835/dataimg/floor_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg", // 세 번째 아이콘 링크
+                    "https://raw.githubusercontent.com/JuHeeS02/ai-docent-test/6fe18ad0c1f66ac4b7727da91ee26ab6d995c835/dataimg/east_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg", // 네 번째 아이콘 링크
+                    "https://raw.githubusercontent.com/JuHeeS02/ai-docent-test/6fe18ad0c1f66ac4b7727da91ee26ab6d995c835/dataimg/assistant_navigation_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg"  // 다섯 번째 아이콘 링크
+                ]; 
+
+                instructionsDiv.innerHTML = instructionsArray.map((instruction, index) => `
+                    <div class="instruction-item">
+                        <img src="${icons[index] || 'https://via.placeholder.com/20'}" alt="icon" class="instruction-icon">
+                        <span>${instruction.trim()}</span>
+                    </div>
+                `).join('');
+            } else {
+                // 마지막 작품 이후 투어 종료 페이지로 이동
+                window.location.href = 'tourend.html';
+            }
+        }
+
+        function goToTouring() {
+            window.location.href = `touring.html?id=${currentId}`;
         }
 
         window.onload = loadArtwork;
