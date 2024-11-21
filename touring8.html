@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touring</title>
+    <style>
+        /* Basic reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .content {
+            width: 100%;
+            max-width: 600px;
+        }
+        .artwork {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: block;
+        }
+        .response-container {
+            background-color: #333;
+            padding: 1em;
+            border-radius: 10px;
+            margin-bottom: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+        .ai-response {
+            font-size: 1em;
+            line-height: 1.5;
+            color: #ddd;
+        }
+        .next-button {
+            background-color: #8B3E3E;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75em;
+            width: 100%;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .next-button:hover {
+            background-color: #A84D4D;
+        }
+        .question-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .question-input {
+            flex-grow: 1;
+            padding: 0.5em;
+            border-radius: 20px;
+            border: none;
+            font-size: 1em;
+            color: #000;
+        }
+        .icon-button {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <img id="artworkImage" alt="Artwork" class="artwork">
+        
+        <div class="response-container">
+            <div class="ai-response" id="description">
+                Loading description...
+            </div>
+        </div>
+
+        <div class="question-section">
+            <input type="text" class="question-input" id="questionInput" placeholder="Ask a question...">
+            <button class="icon-button" onclick="simulateVoiceInput()">🎤</button>
+            <button class="icon-button" onclick="sendQuestion()">➞</button>
+        </div>
+
+        <button class="next-button" onclick="goToNextArtwork()">다음 작품으로 넘어가기</button>
+    </div>
+
+    <script>
+        // Sample artwork data
+        const artworks = [
+            { id: 1, 
+            title: "The Raft of the Medusa / Théodore Géricault",  
+            image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img9-2.png?raw=true", 
+            description: "살 데 제타를 떠나 살 몰리앙에 있는 대형 19세기 프랑스 그림에 시선을 돌려보세요... 1819년 살롱에서 테오도르 제리코는 거대한 그림 메두사의 뗏목을 선보였 는데 , 이는 최근 프랑스 선박의 난파를 묘사한 극적인 장면으로 대중을 충격에 빠뜨린 사건이었습니다. 150명의 사람들이 13일 동안 임시 뗏목을 타고 표류하며 갈증, 굶주림, 질병, 식인 풍습에 시달렸습니다. 겨우 15명만이 살아남아 이야기를 들려주었습니다. 피라미드 구성과 그림의 정밀함은 고전적인 영감이지만, 제리코는 위태로운 뗏목에 쌓인 병자와 죽은 자의 모습에 차갑고 병든 빛을 비추기로 했습니다. 작가는 생존자를 만나고, 모형을 만들고, 영안실과 병원을 방문하여 죽은 자와 죽어가는 자를 관찰하는 데 8개월을 보냈습니다. 결과의 가혹한 사실주의는 매료되거나 혐오감을 느낀 비평가들을 나눴습니다.메두사호의 뗏목은 화가가 죽은 직후인 1824년에 루브르 박물관에 전시되었습니다.\n\n               자유가 인민을 이끈다 외젠 들라크루아 외젠 들라크루아는 위대한 낭만주의 화가 중 한 명으로 여겨진다. 대중의 믿음과는 달리, 자유의 여신이 민중을 이끄는 것은 1789년 프랑스 혁명이 아니라, 1830년 7월 3일간의 봉기를 묘사한 것으로, 당시 파리 시민들이 샤를 10세의 폭정으로부터 자유, 특히 언론의 자유를 지키기 위해 거리로 나선 것을 묘사한다. 들라크루아가 '현대적 주제, 바리케이드'라고 묘사한 이 작품에서, 자유의 우화적 인물은 그리스 여신의 아름다움을 어느 정도 지니고 있지만, 민중의 관능적이고 활기찬 여성으로 의인화되었다. 들라크루아의 가장 유명한 이 그림은 모든 종류의 자유 투쟁에서 언급되었다." 
+            }
+        ];
+
+        function loadArtwork() {
+            const artwork = artworks[0]; // artworks 배열의 첫 번째 작품 데이터 사용
+            document.getElementById('artworkImage').src = artwork.image;
+            document.getElementById('artworkImage').alt = artwork.title; // 이미지 설명 추가
+            document.getElementById('description').textContent = artwork.description;
+        }
+
+        async function sendQuestion() {
+            const question = document.getElementById('questionInput').value;
+            if (!question) {
+                alert("질문을 입력하세요.");
+                return;
+            }
+
+            // OpenAI API 엔드포인트
+            const apiUrl = 'https://api.openai.com/v1/completions';
+            const apiKey = 'YOUR_OPENAI_API_KEY'; // 여기에 본인의 OpenAI API 키를 입력하세요.
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "text-davinci-003",
+                        prompt: question,
+                        max_tokens: 150,
+                        temperature: 0.7
+                    })
+                });
+
+                const data = await response.json();
+                const answer = data.choices[0].text.trim();
+                document.getElementById('description').textContent = `AI 응답: ${answer}`;
+            } catch (error) {
+                console.error('Error:', error);
+                alert("응답을 가져오는 중 문제가 발생했습니다.");
+            }
+        }
+
+        function goToNextArtwork() {
+            window.location.href = 'tourstart9.html';
+        }
+
+        window.onload = loadArtwork;
+    </script>
+</body>
+</html>

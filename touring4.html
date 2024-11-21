@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touring</title>
+    <style>
+        /* Basic reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .content {
+            width: 100%;
+            max-width: 600px;
+        }
+        .artwork {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: block;
+        }
+        .response-container {
+            background-color: #333;
+            padding: 1em;
+            border-radius: 10px;
+            margin-bottom: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+        .ai-response {
+            font-size: 1em;
+            line-height: 1.5;
+            color: #ddd;
+        }
+        .next-button {
+            background-color: #8B3E3E;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75em;
+            width: 100%;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .next-button:hover {
+            background-color: #A84D4D;
+        }
+        .question-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .question-input {
+            flex-grow: 1;
+            padding: 0.5em;
+            border-radius: 20px;
+            border: none;
+            font-size: 1em;
+            color: #000;
+        }
+        .icon-button {
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <img id="artworkImage" alt="Artwork" class="artwork">
+        
+        <div class="response-container">
+            <div class="ai-response" id="description">
+                Loading description...
+            </div>
+        </div>
+
+        <div class="question-section">
+            <input type="text" class="question-input" id="questionInput" placeholder="Ask a question...">
+            <button class="icon-button" onclick="simulateVoiceInput()">🎤</button>
+            <button class="icon-button" onclick="sendQuestion()">➞</button>
+        </div>
+
+        <button class="next-button" onclick="goToNextArtwork()">다음 작품으로 넘어가기</button>
+    </div>
+
+    <script>
+        // Sample artwork data
+        const artworks = [
+            { id: 1, 
+            title: "Venus and the Three Graces Presenting Gifts to a Young Woman / Sandro Botticelli",
+            image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img5.png?raw=true",
+            description: "화가 산드로 보티첼리가 그린 이 웅장한 르네상스 프레스코화는 1873년 이탈리아 피렌체 근처의 빌라를 리노베이션하는 동안 (다시) 발견된 후 1882년 루브르 박물관에 전시되었습니다. 이 작품은 르네상스 시대에 부유한 가문이 살았던 빌라 벽의 하얗게 칠해진 부분 아래에서 발견되었는데, 그 가문은 당시 유명 예술가였던 보티첼리에게 이 작품을 의뢰했을 것입니다. 그는 그 집의 딸을 모델로 삼아 고전적인 여주인공과 큐피드와 함께 배치했는데, 아마도 약혼을 앞두고 그랬을 것입니다. 이 장면은 우화적인 성격을 띠고 있습니다. 보티첼리는 선물 자체보다는 주는 행위에 중점을 두고 있습니다. 두 번째, 비슷하게 우화적인 프레스코화는 프루덴스가 자유 예술에 둘러싸인 청년을 문법가에게 소개하는 모습을 보여줍니다. 청년의 모델이 청년의 약혼자였다고 생각하면 좋을 텐데요…" 
+            }
+        ];
+
+        function loadArtwork() {
+            const artwork = artworks[0]; // artworks 배열의 첫 번째 작품 데이터 사용
+            document.getElementById('artworkImage').src = artwork.image;
+            document.getElementById('artworkImage').alt = artwork.title; // 이미지 설명 추가
+            document.getElementById('description').textContent = artwork.description;
+        }
+
+        async function sendQuestion() {
+            const question = document.getElementById('questionInput').value;
+            if (!question) {
+                alert("질문을 입력하세요.");
+                return;
+            }
+
+            // OpenAI API 엔드포인트
+            const apiUrl = 'https://api.openai.com/v1/completions';
+            const apiKey = 'YOUR_OPENAI_API_KEY'; // 여기에 본인의 OpenAI API 키를 입력하세요.
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "text-davinci-003",
+                        prompt: question,
+                        max_tokens: 150,
+                        temperature: 0.7
+                    })
+                });
+
+                const data = await response.json();
+                const answer = data.choices[0].text.trim();
+                document.getElementById('description').textContent = `AI 응답: ${answer}`;
+            } catch (error) {
+                console.error('Error:', error);
+                alert("응답을 가져오는 중 문제가 발생했습니다.");
+            }
+        }
+
+        function goToNextArtwork() {
+            window.location.href = 'tourstart5.html';
+        }
+
+        window.onload = loadArtwork;
+    </script>
+</body>
+</html>
