@@ -117,50 +117,19 @@
              image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img2-2.png?raw=true", 
              description: "앙리 2세 치세에 루브르 박물관은 중세 요새에서 르네상스 궁전으로의 전환을 완료했습니다. Salle des Cariatides는 원래 건축가 Pierre Lescot가 고전적인 스타일로 디자인한 화려한 무도장이었습니다. 여기에는 음악가 갤러리가 있으며, 로마에서 영감을 받은 4개의 '카리아티드'가 있습니다. 기둥 역할을 하는 이 조각된 여성상은 건축가가 앙리 2세를 로마 황제 아우구스투스의 지위로 격상시키는 방식이었습니다!\n\n
                 이 방의 용도는 1692년에 프랑스 왕족이 르네상스 시대에 수집하기 시작한 고전 조각품을 전시하는 이 방의 용도는 1692년에 프랑스 왕족이 르네상스 시대에 수집하기 시작한 고전 조각품을 전시하는 데 사용되면서 바뀌었습니다. 왕실 컬렉션에 들어간 최초의 걸작 중 하나인 다이애나 더 헌트리스(Diana the Huntress )에 나폴레옹 1세가 구입한 잠자는 헤르마프로디토스(Sleeping Hermaphroditos ) 가 1807년에 추가되었습니다. 이 매혹적인 인물의 본질을 이해하려면 모든 면에서 보아야 합니다. 사용되면서 바뀌었습니다. 왕실 컬렉션에 들어간 최초의 걸작 중 하나인 다이애나 더 헌트리스(Diana the Huntress )에 나폴레옹 1세가 구입한 잠자는 헤르마프로디토스(Sleeping Hermaphroditos ) 가 1807년에 추가되었습니다. 이 매혹적인 인물의 본질을 이해하려면 모든 면에서 보아야 합니다." 
-            },
+            }
       ];
 
-        const urlParams = new URLSearchParams(window.location.search);
-        let currentId = parseInt(urlParams.get('id')) || 1;
-
-        if (isNaN(currentId) || currentId < 1 || currentId > artworks.length) {
-            currentId = 1;
-    }
-
         function loadArtwork() {
-            const artwork = artworks.find(item => item.id === currentId);
-            if (artwork) {
-                document.getElementById('artworkImage').src = artwork.image;
-                document.getElementById('artworkImage').alt = artwork.title; // 이미지 설명 추가
-                document.getElementById('description').textContent = artwork.description;
-            } else {
-                console.error('해당 id에 맞는 작품을 찾을 수 없습니다.');
-                document.getElementById('description').textContent = "작품 정보를 불러올 수 없습니다.";
-            }
-        }
-
-        function simulateVoiceInput() {
-            document.getElementById('questionInput').value = "What is the significance of this artwork?";
-            sendQuestion();
-        }
-
-        function sendQuestion() {
-            const question = document.getElementById('questionInput').value;
-            if (question) {
-                const responseBox = document.getElementById('description');
-                responseBox.textContent = `AI도슨트: This artwork's significance is that it symbolizes ${question.toLowerCase()}.`;
-                document.getElementById('questionInput').value = ""; // Clear input
-            }
+            document.getElementById('artworkImage').src = artwork.image;
+            document.getElementById('artworkImage').alt = artwork.title; // 이미지 설명 추가
+            document.getElementById('description').textContent = artwork.description;
         }
 
         function goToNextArtwork() {
-            currentId++;
-            if (currentId <= artworks.length) {
-                window.location.href = `tourstart.html?id=${currentId}`;
-            } else {
-                window.location.href = 'tourstart2.html';
-            }
+            window.location.href = 'tourstart.html';
         }
+
         window.onload = loadArtwork;
     </script>
 </body>
