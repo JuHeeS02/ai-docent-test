@@ -113,9 +113,9 @@
         // Sample artwork data
         const artworks = [
             { id: 1, 
-            title: "Venus and the Three Graces Presenting Gifts to a Young Woman / Sandro Botticelli",
-            image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img5.png?raw=true",
-            description: "화가 산드로 보티첼리가 그린 이 웅장한 르네상스 프레스코화는 1873년, 이탈리아 피렌체 근처의 한 빌라를 리노베이션하는 과정에서 하얗게 칠해진 벽 아래에 숨겨져 있던 모습으로 발견되었습니다.<br>그 후, 1882년에 루브르 박물관에 전시되며 많은 이들에게 공개되었는데요.<br>이 작품은 르네상스 시대 부유한 가문이 보티첼리에게 의뢰한 것으로 추정됩니다.<br>그는 그 가문의 딸을 모델로 삼아 고전적인 여주인공과 큐피드와 함께 이 장면을 배치했으며, 이는 아마 약혼을 기념하기 위한 의도로 보입니다.<br>장면 자체는 우화적인 성격을 띠고 있으며, 보티첼리는 선물 그 자체보다는 선물을 주는 행위에 더 초점을 맞추고 있습니다.<br>두 번째, 비슷한 우화적인 프레스코화는 프루덴스가 자유 예술에 둘러싸인 한 청년을 문법가에게 소개하는 모습을 담고 있습니다.<br>여기에서 청년의 모델이 약혼자였다고 생각하면 더욱 흥미롭겠죠."            
+              title: "Venus and the Three Graces Presenting Gifts to a Young Woman / Sandro Botticelli",
+              image: "https://github.com/JuHeeS02/ai-docent-test/blob/main/dataimg/%EB%A3%A8%EB%B8%8C%EB%A5%B4%EC%BD%94%EC%8A%A41/img5.png?raw=true",
+              description: "화가 산드로 보티첼리가 그린 이 웅장한 르네상스 프레스코화는 1873년, 이탈리아 피렌체 근처의 한 빌라를 리노베이션하는 과정에서 하얗게 칠해진 벽 아래에 숨겨져 있던 모습으로 발견되었습니다.<br>그 후, 1882년에 루브르 박물관에 전시되며 많은 이들에게 공개되었는데요.<br>이 작품은 르네상스 시대 부유한 가문이 보티첼리에게 의뢰한 것으로 추정됩니다.<br>그는 그 가문의 딸을 모델로 삼아 고전적인 여주인공과 큐피드와 함께 이 장면을 배치했으며, 이는 아마 약혼을 기념하기 위한 의도로 보입니다.<br>장면 자체는 우화적인 성격을 띠고 있으며, 보티첼리는 선물 그 자체보다는 선물을 주는 행위에 더 초점을 맞추고 있습니다.<br>두 번째, 비슷한 우화적인 프레스코화는 프루덴스가 자유 예술에 둘러싸인 한 청년을 문법가에게 소개하는 모습을 담고 있습니다.<br>여기에서 청년의 모델이 약혼자였다고 생각하면 더욱 흥미롭겠죠."            
             }
         ];
 
@@ -123,7 +123,7 @@
             const artwork = artworks[0]; // artworks 배열의 첫 번째 작품 데이터 사용
             document.getElementById('artworkImage').src = artwork.image;
             document.getElementById('artworkImage').alt = artwork.title; // 이미지 설명 추가
-            document.getElementById('description').textContent = artwork.description;
+            document.getElementById('description').innerHTML = artwork.description; // innerHTML 사용으로 HTML 태그 적용
         }
 
         async function sendQuestion() {
@@ -154,7 +154,7 @@
 
                 const data = await response.json();
                 const answer = data.choices[0].text.trim();
-                document.getElementById('description').textContent = `AI 응답: ${answer}`;
+                document.getElementById('description').innerHTML += `<br><br>AI 응답: ${answer}`; // 응답을 기존 설명에 추가
             } catch (error) {
                 console.error('Error:', error);
                 alert("응답을 가져오는 중 문제가 발생했습니다.");
