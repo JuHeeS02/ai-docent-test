@@ -106,6 +106,19 @@
             text-align: center;
             width: 100%;
         }
+        #status {
+            margin-top: 20px;
+        }
+
+        button.recording {
+            background-color: red;
+            color: white;
+        }
+
+        button.normal {
+            background-color: #333;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -128,6 +141,9 @@
             ➔
         </button>
     </div>
+    <div id="videoContainer">
+        <video id="videoPreview" autoplay></video>
+    </div>
 
     <!-- Instruction text -->
     <div class="instruction">
@@ -139,6 +155,9 @@
         const videoContainer = document.getElementById("videoContainer");
         const videoPreview = document.getElementById("videoPreview");
         let mediaStream;
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
 
         // Function to start the rear camera
         async function startCamera() {
@@ -173,11 +192,28 @@
             sendPhotoToGPT(imageUrl);
         }
 
+        // Function to upload an image
+        function uploadImage() {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.onchange = () => {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        addMessage("user", `<img src="${reader.result}" alt="Uploaded Image">`);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        }
+
         // Function to simulate sending the photo to GPT API
         async function sendPhotoToGPT(imageUrl) {
             addMessage("system", "Processing the photo...");
             try {
-                // Simulate sending photo to GPT API
                 const response = await fetch("https://api.example.com/photo", {
                     method: "POST",
                     headers: {
@@ -212,7 +248,6 @@
                 mediaRecorder.onstop = async () => {
                     const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
 
-                    // Use Whisper API for transcription
                     const formData = new FormData();
                     formData.append("file", audioBlob);
                     formData.append("model", "whisper-1");
@@ -290,55 +325,67 @@
             // Scroll to the bottom of the chat
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
-        let mediaRecorder;
-        let audioChunks = [];
-        let isRecording = false;
 
         function uploadImage() {
             alert("Camera button clicked. Implement image upload here.");
         }
 
-        async function toggleRecording() {
-            const micButton = document.getElementById("micButton");
+        
 
+        async function toggleRecording() {
             if (!isRecording) {
                 // Start recording
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
+
                 mediaRecorder.ondataavailable = event => {
                     audioChunks.push(event.data);
                 };
 
                 mediaRecorder.start();
-                micButton.textContent = "⏹️"; // Change button to indicate "stop"
+                micButton.textContent = "Stop Recording";
+                micButton.classList.add("recording");
+                status.textContent = "Status: Recording...";
                 isRecording = true;
-
-                alert("Recording started. Press again to stop.");
             } else {
                 // Stop recording
                 mediaRecorder.stop();
+                micButton.textContent = "Start Recording";
+                micButton.classList.remove("recording");
+                status.textContent = "Status: Processing...";
                 isRecording = false;
-                micButton.textContent = "🎤"; // Change button back to microphone icon
 
-                mediaRecorder.onstop = () => {
+                mediaRecorder.onstop = async () => {
                     // Combine audio chunks into a single Blob
                     const audioBlob = new Blob(audioChunks, { type: "audio/mp3" });
                     audioChunks = []; // Clear the chunks
 
-                    // Create a download link
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    const downloadLink = document.createElement("a");
-                    downloadLink.href = audioUrl;
-                    downloadLink.download = "recording.mp3";
-                    downloadLink.textContent = "Download MP3";
+                    // Send Blob to Flask server
+                    const formData = new FormData();
+                    formData.append("audio", audioBlob, "recording.mp3");
 
-                    // Display the download link
-                    document.body.appendChild(downloadLink);
+                    try {
+                        const response = await fetch("/upload-audio", {
+                            method: "POST",
+                            body: formData,
+                        });
 
-                    alert("Recording stopped. MP3 file ready for download.");
+                        if (response.ok) {
+                            const result = await response.json();
+                            status.textContent = `Status: Uploaded successfully! File saved at: ${result.file_path}`;
+                        } else {
+                            status.textContent = "Status: Upload failed.";
+                        }
+                    } catch (error) {
+                        console.error("Error uploading audio:", error);
+                        status.textContent = "Status: Error uploading audio.";
+                    }
                 };
             }
         }
+
+        micButton.addEventListener("click", toggleRecording);
+
 
         function uploadMessage() {
             const message = document.getElementById("messageInput").value;
